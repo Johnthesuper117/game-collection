@@ -39,7 +39,8 @@ export default function HomePage() {
 
       setResults(payload.results || []);
       setTotal(payload.total || 0);
-    } catch {
+    } catch (err) {
+      console.error('Search error:', err);
       setResults([]);
       setTotal(0);
       setError('search failed - try again');

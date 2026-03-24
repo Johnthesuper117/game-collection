@@ -26,7 +26,7 @@ const CACHE_FILES = [
 // Shared in-memory cache so the large game index is built once per server instance.
 // It is intentionally only invalidated on server restart; this trades memory for speed and avoids
 // rebuilding/parsing the full preserved catalog on every search request.
-let cachedIndexPromise;
+let cachedIndexPromise = null;
 
 function safeDecode(value) {
   try {
@@ -100,7 +100,7 @@ async function loadIndex() {
         ...cacheIndex,
       ])
       .catch((error) => {
-        cachedIndexPromise = undefined;
+        cachedIndexPromise = null;
         throw error;
       });
   }
