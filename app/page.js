@@ -5,32 +5,47 @@ import { useMemo, useState } from 'react';
 export default function HomePage() {
   const [query, setQuery] = useState('');
   const [activeQuery, setActiveQuery] = useState('');
+  const [hasSearched, setHasSearched] = useState(false);
   const [source, setSource] = useState('all');
   const [results, setResults] = useState([]);
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
   const terminalStatus = useMemo(() => {
     if (loading) return 'searching index...';
-    if (!activeQuery) return 'ready';
+    if (!hasSearched) return 'ready';
+    if (!activeQuery) return `showing ${results.length} of ${total} results`;
     return `showing ${results.length} of ${total} results for "${activeQuery}"`;
-  }, [loading, activeQuery, results.length, total]);
+  }, [loading, hasSearched, activeQuery, results.length, total]);
 
   async function runSearch(nextQuery = query, nextSource = source) {
     const trimmed = nextQuery.trim();
     setActiveQuery(trimmed);
+    setHasSearched(true);
     setLoading(true);
+    setError('');
 
-    const params = new URLSearchParams();
-    if (trimmed) params.set('q', trimmed);
-    if (nextSource !== 'all') params.set('source', nextSource);
+    try {
+      const params = new URLSearchParams();
+      if (trimmed) params.set('q', trimmed);
+      if (nextSource !== 'all') params.set('source', nextSource);
 
-    const response = await fetch(`/api/games?${params.toString()}`);
-    const payload = await response.json();
+      const response = await fetch(`/api/games?${params.toString()}`);
+      if (!response.ok) {
+        throw new Error(`Search request failed with status ${response.status}`);
+      }
+      const payload = await response.json();
 
-    setResults(payload.results || []);
-    setTotal(payload.total || 0);
-    setLoading(false);
+      setResults(payload.results || []);
+      setTotal(payload.total || 0);
+    } catch {
+      setResults([]);
+      setTotal(0);
+      setError('search failed - try again');
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
@@ -85,6 +100,7 @@ export default function HomePage() {
         </div>
 
         <p className="meta">Search + index data are preserved from existing atlas/caches; UV proxy removed.</p>
+        {error && <p className="meta">{error}</p>}
 
         <div className="results">
           {results.map((game) => (

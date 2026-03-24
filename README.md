@@ -14,7 +14,7 @@ thepegleg is a gaming website done differently.
 
 - **Pretty much unblockable:** Easily accessable from many access points.
 - **Games:** ~200,000 games, constantly expanding.
-- **No built-in proxy:** The web proxy has been removed.
+  - **No built-in proxy:** The web proxy has been removed.
 - **Proxy links:** 1000+ private proxy links, made by us (in the discord)
 - **Movies & Shows** Movie and TV search and streaming with all your favorites.
 - **Chatgpt:** Unblocked and working AI.

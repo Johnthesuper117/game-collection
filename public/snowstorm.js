@@ -1,3 +1,12 @@
+/**
+ * NOTE ON DUPLICATE FILE:
+ *
+ * This copy of `snowstorm.js` under `public/` is the canonical version used
+ * by the Next.js application (served as `/snowstorm.js`).
+ *
+ * The repository also contains a root-level `snowstorm.js` for backward
+ * compatibility with legacy paths. Keep this file authoritative when updating.
+ */
 /** @license
  * DHTML Snowstorm! JavaScript-based snow for web pages
  * Making it snow on the internets since 2003. You're welcome.

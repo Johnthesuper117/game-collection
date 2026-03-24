@@ -24,8 +24,9 @@ async function resolveFile(pathParts = []) {
 
   const requestedPath = path.join(LEGACY_ROOT, ...normalizedParts);
   const normalizedPath = path.normalize(requestedPath);
+  const relativePath = path.relative(LEGACY_ROOT, normalizedPath);
 
-  if (!normalizedPath.startsWith(LEGACY_ROOT)) {
+  if (relativePath.startsWith('..') || path.isAbsolute(relativePath)) {
     return null;
   }
 

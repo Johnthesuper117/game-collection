@@ -94,10 +94,15 @@ async function loadCacheIndex() {
 
 async function loadIndex() {
   if (!cachedIndexPromise) {
-    cachedIndexPromise = Promise.all([loadSourceJsonIndex(), loadCacheIndex()]).then(([sourceIndex, cacheIndex]) => [
-      ...sourceIndex,
-      ...cacheIndex,
-    ]);
+    cachedIndexPromise = Promise.all([loadSourceJsonIndex(), loadCacheIndex()])
+      .then(([sourceIndex, cacheIndex]) => [
+        ...sourceIndex,
+        ...cacheIndex,
+      ])
+      .catch((error) => {
+        cachedIndexPromise = undefined;
+        throw error;
+      });
   }
   return cachedIndexPromise;
 }
